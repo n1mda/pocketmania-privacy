@@ -1,6 +1,6 @@
 # Pocket Mania: Privacy Policy
 
-Last updated: 1 November 2026
+Last updated: 2 November 2026
 
 Pocket Mania is a racing game for iPhone. This policy says what the app does
 with your data.
@@ -22,7 +22,8 @@ When you are signed in, the app sends:
   each track; not its name), a code for the track's layout and the game's
   physics version (so a run is only compared on the same track), and the
   run's steering, gas and brake inputs (what the game needs to replay your
-  ghost). They are stored in the game's public iCloud database, where
+  ghost) and the car skin you chose (so your ghost wears it on other
+  players' phones). They are stored in the game's public iCloud database, where
   other players of Pocket Mania can download them. The game's leaderboards
   are made from these runs on each phone; there is no other leaderboard.
 - **Your region code** (for example SE) from your phone's language
@@ -31,12 +32,30 @@ When you are signed in, the app sends:
   id and the time, so your Game Center friends can see "Anna is driving Tangle"
   and join you. It is overwritten each time and counts as old after two
   minutes.
-- **Live races**: when you race a friend live, the track's id and your
-  inputs go to that friend's phone through Game Center while you drive.
-  They are not stored.
-
+- **Friends on the same track**: while you drive one of the game's tracks,
+  your Game Center friends can join your race without a prompt, and when a
+  friend drives the same track at the same time your phones connect by
+  themselves; your run so far, your inputs while you drive and your car skin
+  then go to that friend's phone through Game Center (only friends: anyone
+  else is disconnected). They are not stored.
+- **Notices to friends**: when your new best time passes the best time
+  of a Game Center friend on a track, the app saves a short notice for
+  that friend in the game's public iCloud database. It holds your player
+  ID and nickname, the friend's player ID, the track's id and its layout
+  code, and the text "Your nickname beat your time on Tangle by 0:00.32",
+  with the date. Apple then sends it to your friend as a notification. A
+  **challenge** you send a friend is a notice of the same kind, with the
+  text "Your nickname challenges you on Tangle". At most one of each goes to each friend per track per hour. Your friend's phone
+  deletes it once it has been read. Notices that are never read stay until
+  the next one for the same friend and track replaces them, or until you
+  ask us to delete them.
+- **Notifications**: the app asks before it sends you notifications, after
+  your first challenge or the first time you beat a friend, never at launch.
+  If you allow them, your phone signs up with Apple's iCloud to be told
+  about notices addressed to you (no address book, no location). You can
+  turn them off in the game's Settings > Notifications or in iOS Settings.
 The app reads your Game Center friends list on your phone (iOS asks you
-first) to show your friends' times and ghosts and to invite them; it does
+first) to show your friends' times and ghosts and to challenge them; it does
 not send the list anywhere. Other players' runs that the app downloads are
 checked on your phone and used only to show their ghosts and times.
 
@@ -75,7 +94,19 @@ Time (Game Center > Multiplayer Games, Adding Friends).
 Changes to this policy are listed here with a new date. 1 November 2026:
 online play (your Game Center profile and friends, leaderboards made from
 uploaded runs, friends' and other players' ghosts, live races) and what it
-sends.
+sends. 1 November 2026, later: your chosen car skin is sent with your runs
+and live races, and friends can join a race you are driving without a
+prompt. 1 November 2026, later still: notices to friends whose best time
+you pass (what they contain, and that the recipient's phone deletes them
+after reading), and notifications, which you choose to allow. 1 November 2026,
+private lobbies: the lobby record (who hosts it, the invited friends'
+player IDs, the track and the round times), lobby invites as notices, and
+your best run of each round saved for the other players in the lobby.
+2 November 2026: private lobbies and live race invitations (with rematch
+requests) are gone; the app no longer makes lobby records or lobby runs (ask
+us to delete any of yours, contact below). Challenges to friends are
+notices (what they contain is above), and a friend on the same track at the
+same time connects without a prompt.
 
 ## Contact
 
