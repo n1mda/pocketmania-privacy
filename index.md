@@ -1,6 +1,6 @@
 # Pocket Mania: Privacy Policy
 
-Last updated: 2 November 2026
+Last updated: 14 November 2026
 
 Pocket Mania is a racing game for iPhone. This policy says what the app does
 with your data.
@@ -49,6 +49,18 @@ When you are signed in, the app sends:
   deletes it once it has been read. Notices that are never read stay until
   the next one for the same friend and track replaces them, or until you
   ask us to delete them.
+- **Tracks you share** (only when you tap Share in the track editor and pick
+  Send to a friend or Show in Browse): the track (its blocks, name, mood and
+  id), your fastest time on it, and your player ID and nickname, saved in
+  the game's public iCloud database so other players of Pocket Mania can
+  download and race it. Send to a friend also saves a notice for that friend
+  ("Your nickname sent you a track: Tangle"), as above. Sharing again
+  replaces your earlier version. To have a track removed, write to the
+  contact address below.
+- **Reports**: when you report a shared track, the app saves your player ID,
+  the track's id, a short reason and the date in the public iCloud
+  database. A track several players report is hidden until we check it.
+  Blocking a player is kept on your phone only.
 - **Notifications**: the app asks before it sends you notifications, after
   your first challenge or the first time you beat a friend, never at launch.
   If you allow them, your phone signs up with Apple's iCloud to be told
@@ -79,6 +91,16 @@ or Save Video); the app sends it nowhere by itself. Save Video asks for
 permission to add the video to your Photos library. The app cannot see or
 read your photos.
 
+## Track links
+
+Send link in the track editor puts the whole track (its blocks, name, mood,
+your time and your nickname) inside a link and opens the iPhone's share
+sheet; you choose who gets it. The track is in the part of the link after
+the "#", which browsers never send to a server: our track page
+(https://n1mda.github.io/pocketmania-privacy/t/) reads it in the browser only,
+stores nothing and sends nothing. A friend who opens the link in the game
+gets a copy of the track on their phone.
+
 ## Microphone and camera
 
 The app does not use the microphone or the camera.
@@ -106,7 +128,10 @@ your best run of each round saved for the other players in the lobby.
 requests) are gone; the app no longer makes lobby records or lobby runs (ask
 us to delete any of yours, contact below). Challenges to friends are
 notices (what they contain is above), and a friend on the same track at the
-same time connects without a prompt.
+same time connects without a prompt. 14 November 2026: shared tracks (a link
+you send yourself; Send to a friend and Show in Browse, which store the
+track with your nickname in the public iCloud database), reports of shared
+tracks, and the track page that opens a link.
 
 ## Contact
 
