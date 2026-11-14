@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<title>Pocket Mania track</title>
+<!--
+  The fallback page of a shared track (decisions.md D212). Copied to the
+  pocketmania-privacy repository as t/index.html (https://n1mda.github.io/pocketmania-privacy/t/). The track is in the link's
+  fragment (#...), which the browser never sends to a server: this page reads
+  it here, draws the track from above and offers to open it in the game.
+  Payload: base64url (no padding) of zlib-deflated JSON (Godot's
+  COMPRESSION_DEFLATE): {"v":1, "id", "name", "mood", "type", "author",
+  "alias", "based_on"?, "seed"?, "author_ticks"? (the author's time, 10 ms
+  ticks), "cells": [[x, y, z, block, turn], ...]}.
+  No external scripts, nothing stored, nothing sent.
+-->
+<style>
+  :root {
+    --bg: #0B2A52;
+    --panel: #12386A;
+    --line: #1E4C86;
+    --text: #FFFFFF;
+    --dim: #A9BEDB;
+    --yellow: #FFC81E;
+    --ink: #0B2A52;
+    --go: #3DDC84;
+    --coral: #FF6B5A;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); }
+  body {
+    font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+             max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  main { width: 100%; max-width: 880px; display: grid; gap: 20px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { main { grid-template-columns: 1.2fr 1fr; align-items: center; } }
+  .map { background: var(--panel); border: 2px solid var(--line); border-radius: 6px; padding: 12px; }
+  canvas { display: block; width: 100%; aspect-ratio: 1; }
+  .brand { font-style: italic; font-weight: 800; letter-spacing: .08em; color: var(--yellow); text-transform: uppercase; font-size: 14px; margin: 0 0 8px; }
+  h1 { font-style: italic; font-weight: 800; font-size: clamp(28px, 6vw, 44px); line-height: 1.05; margin: 0 0 6px; text-transform: uppercase; overflow-wrap: anywhere; }
+  .by { color: var(--dim); margin: 0 0 4px; overflow-wrap: anywhere; }
+  .facts { color: var(--dim); font-size: 14px; margin: 0 0 20px; }
+  .button { display: block; text-align: center; text-decoration: none; font-weight: 800; font-style: italic; text-transform: uppercase;
+            letter-spacing: .04em; border-radius: 4px; padding: 14px 18px; margin-top: 10px; min-height: 48px; }
+  .primary { background: var(--yellow); color: var(--ink); }
+  .secondary { border: 2px solid var(--line); color: var(--text); }
+  .note { color: var(--dim); font-size: 13px; margin-top: 14px; }
+  .error h1 { font-size: 28px; }
+</style>
+</head>
+<body>
+<main id="main">
+  <div class="map"><canvas id="map" width="640" height="640" aria-label="The track seen from above"></canvas></div>
+  <section>
+    <p class="brand">Pocket Mania</p>
+    <h1 id="name">Loading track</h1>
+    <p class="by" id="by"></p>
+    <p class="facts" id="facts"></p>
+    <a class="button primary" id="open" href="pocketmania://t/">Open in Pocket Mania</a>
+    <!-- App Store link: replace APP_ID once the app is live. -->
+    <a class="button secondary" id="store" href="https://apps.apple.com/app/idAPP_ID">Get Pocket Mania</a>
+    <p class="note">The track travels inside this link. Nothing about it is sent to any server.</p>
+  </section>
+</main>
+<script>
+"use strict";
+const GRID = 32, MAX_CELLS = 1024, MAX_JSON = 65536;
+const START = 7, CHECKPOINT = 8, FINISH = 9;
+const MOODS = { "": "Day", day: "Day", sunrise: "Sunrise", sunset: "Sunset", night: "Night" };
+
+// base64url (no padding) -> bytes
+function unbase64url(text) {
+  if (!/^[A-Za-z0-9_-]+$/.test(text) || text.length % 4 === 1) throw new Error("not base64url");
+  let b64 = text.replace(/-/g, "+").replace(/_/g, "/");
+  while (b64.length % 4) b64 += "=";
+  const raw = atob(b64);
+  const bytes = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+  return bytes;
+}
+
+// zlib inflate (Godot writes zlib: a 0x78 header, an Adler-32 trailer), at most MAX_JSON bytes.
+async function inflate(bytes) {
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate"));
+  const reader = stream.getReader();
+  const parts = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.length;
+    if (size > MAX_JSON) { reader.cancel(); throw new Error("too big"); }
+    parts.push(value);
+  }
+  const out = new Uint8Array(size);
+  let at = 0;
+  for (const p of parts) { out.set(p, at); at += p.length; }
+  return new TextDecoder().decode(out);
+}
+
+// The fragment as a checked track, or an Error.
+async function decode(data) {
+  const track = JSON.parse(await inflate(unbase64url(data)));
+  const isText = (v, max) => typeof v === "string" && v.length <= max;
+  if (!track || track.v !== 1 || !isText(track.name, 24) || !track.name || !isText(track.alias || "", 64) || !Array.isArray(track.cells)
+      || track.cells.length === 0 || track.cells.length > MAX_CELLS) throw new Error("not a track");
+  for (const c of track.cells) {
+    if (!Array.isArray(c) || c.length !== 5 || !c.every(Number.isInteger)) throw new Error("bad cell");
+    if (c[0] < 0 || c[0] >= GRID || c[1] < 0 || c[1] >= GRID || c[2] < 0 || c[2] >= GRID || c[4] < 0 || c[4] > 3) throw new Error("bad cell");
+  }
+  return track;
+}
+
+// The track from above: a square per block, higher levels lighter, the start green, checkpoints yellow, the finish coral.
+function draw(canvas, cells) {
+  const g = canvas.getContext("2d");
+  const size = canvas.width;
+  g.clearRect(0, 0, size, size);
+  let lo = [GRID, GRID], hi = [0, 0], top = 1;
+  for (const c of cells) {
+    lo = [Math.min(lo[0], c[0]), Math.min(lo[1], c[2])];
+    hi = [Math.max(hi[0], c[0]), Math.max(hi[1], c[2])];
+    top = Math.max(top, c[1]);
+  }
+  const span = Math.max(hi[0] - lo[0], hi[1] - lo[1]) + 1;
+  const step = Math.floor((size - 24) / span);
+  const ox = (size - (hi[0] - lo[0] + 1) * step) / 2, oy = (size - (hi[1] - lo[1] + 1) * step) / 2;
+  const sorted = [...cells].sort((a, b) => a[1] - b[1]);  // low first, so the high road is on top
+  for (const c of sorted) {
+    const light = 0.35 + 0.5 * (c[1] / top);
+    g.fillStyle = c[3] === START ? "#3DDC84" : c[3] === FINISH ? "#FF6B5A" : c[3] === CHECKPOINT ? "#FFC81E"
+      : `rgb(${Math.round(255 * light * 0.85)}, ${Math.round(255 * light * 0.92)}, ${Math.round(255 * light)})`;
+    g.fillRect(ox + (c[0] - lo[0]) * step + 1, oy + (c[2] - lo[1]) * step + 1, Math.max(1, step - 2), Math.max(1, step - 2));
+  }
+}
+
+function fail(why) {
+  document.getElementById("main").classList.add("error");
+  document.getElementById("name").textContent = "This link has no track";
+  document.getElementById("by").textContent = why;
+  document.getElementById("open").style.display = "none";
+}
+
+async function main() {
+  const data = location.hash.slice(1);
+  if (!data) return fail("Ask your friend to share it again.");
+  if (typeof DecompressionStream === "undefined") {
+    document.getElementById("name").textContent = "A Pocket Mania track";
+    document.getElementById("by").textContent = "Open it in the game to see it.";
+  } else {
+    let track;
+    try { track = await decode(data); } catch (e) { return fail("The link is broken or cut short. Ask your friend to share it again."); }
+    document.title = track.name + " - Pocket Mania";
+    document.getElementById("name").textContent = track.name;
+    document.getElementById("by").textContent = track.alias ? "A track by " + track.alias : "A Pocket Mania track";
+    const based = track.based_on && typeof track.based_on.name === "string" ? " · based on " + track.based_on.name : "";
+    const ticks = Number.isInteger(track.author_ticks) && track.author_ticks > 0 && track.author_ticks <= 360000 ? track.author_ticks : 0;
+    const time = ticks ? " · author time " + Math.floor(ticks / 6000) + ":" + String(Math.floor(ticks / 100) % 60).padStart(2, "0")
+      + "." + String(ticks % 100).padStart(2, "0") : "";
+    document.getElementById("facts").textContent = track.cells.length + " blocks · " + (MOODS[track.mood] || "Day") + time + based;
+    draw(document.getElementById("map"), track.cells);
+  }
+  // The app's own scheme: Safari opens a link to this same site itself, never the app.
+  document.getElementById("open").href = "pocketmania://t/#" + data;
+}
+main();
+// Another shared link opened in this tab changes only the fragment: read it afresh.
+window.addEventListener("hashchange", () => location.reload());
+</script>
+</body>
+</html>
