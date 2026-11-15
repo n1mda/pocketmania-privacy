@@ -1,6 +1,6 @@
 # Pocket Mania: Privacy Policy
 
-Last updated: 14 November 2026
+Last updated: 15 November 2026
 
 Pocket Mania is a racing game for iPhone. This policy says what the app does
 with your data.
@@ -49,14 +49,18 @@ When you are signed in, the app sends:
   deletes it once it has been read. Notices that are never read stay until
   the next one for the same friend and track replaces them, or until you
   ask us to delete them.
-- **Tracks you share** (only when you tap Share in the track editor and pick
-  Send to a friend or Show in Browse): the track (its blocks, name, mood and
-  id), your fastest time on it, and your player ID and nickname, saved in
-  the game's public iCloud database so other players of Pocket Mania can
-  download and race it. Send to a friend also saves a notice for that friend
-  ("Your nickname sent you a track: Tangle"), as above. Sharing again
-  replaces your earlier version. To have a track removed, write to the
-  contact address below.
+- **Tracks you build**: when you first drive a track you built to the
+  finish (a Test drive or in Solo), the track (its blocks, name, mood and
+  id), your fastest time on it, and your player ID and nickname are saved in
+  the game's public iCloud database, so other players of Pocket Mania see it
+  in Community and can download and race it. A faster finish, or a finish
+  after you change the track, replaces it. Tracks you have not finished stay
+  on your phone. Send to a friend also saves a notice for that friend
+  ("Your nickname sent you a track: Tangle"), as above. To have a track
+  removed, write to the contact address below.
+- **Stars**: when you star a track you finished, your player ID, the track's
+  id and the date are saved in the public iCloud database, so the track's
+  star count can be shown; taking the star back deletes it.
 - **Reports**: when you report a shared track, the app saves your player ID,
   the track's id, a short reason and the date in the public iCloud
   database. A track several players report is hidden until we check it.
@@ -131,7 +135,9 @@ notices (what they contain is above), and a friend on the same track at the
 same time connects without a prompt. 14 November 2026: shared tracks (a link
 you send yourself; Send to a friend and Show in Browse, which store the
 track with your nickname in the public iCloud database), reports of shared
-tracks, and the track page that opens a link.
+tracks, and the track page that opens a link. 15 November 2026: a track you
+build is published when you first drive it to the finish (no Show in Browse
+step any more), and stars on tracks.
 
 ## Contact
 
