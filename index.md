@@ -1,6 +1,6 @@
 # Pocket Mania: Privacy Policy
 
-Last updated: 15 November 2026
+Last updated: 19 November 2026
 
 Pocket Mania is a racing game for iPhone. This policy says what the app does
 with your data.
@@ -58,6 +58,14 @@ When you are signed in, the app sends:
   on your phone. Send to a friend also saves a notice for that friend
   ("Your nickname sent you a track: Tangle"), as above. To have a track
   removed, write to the contact address below.
+- **Ghost links**: when you tap Send ghost after a race, Challenge for a
+  friend, or Send link in the track editor, that run (your
+  inputs, its time, the track's id and content hash, your car skin, your
+  player ID and nickname, and, for a track that did not come with the game,
+  the track itself as in a track link) is saved in the public iCloud
+  database under a random id, so whoever opens the link can race it. It is
+  kept even after you drive faster; to have one removed, write to the
+  contact address below.
 - **Stars**: when you star a track you finished, your player ID, the track's
   id and the date are saved in the public iCloud database, so the track's
   star count can be shown; taking the star back deletes it.
@@ -95,11 +103,22 @@ or Save Video); the app sends it nowhere by itself. Save Video asks for
 permission to add the video to your Photos library. The app cannot see or
 read your photos.
 
+## Ghost links
+
+Send ghost on the finish screen opens the iPhone's share sheet with a link to
+the run you just drove; you choose who gets it. The link carries the ghost's
+random id and, for the page that opens it on a phone without the game, the
+track's name, your nickname and your time, all after the "#", which browsers
+never send to a server: our ghost page
+(https://n1mda.github.io/pocketmania-privacy/g/) reads it in the browser only,
+stores nothing and sends nothing; its buttons open the game or the App Store.
+
 ## Track links
 
-Send link in the track editor puts the whole track (its blocks, name, mood,
-your time and your nickname) inside a link and opens the iPhone's share
-sheet; you choose who gets it. The track is in the part of the link after
+Before 19 November 2026, Send link in the track editor put the whole track
+(its blocks, name, mood, your time and your nickname) inside a link and
+opened the iPhone's share sheet; you chose who got it. It now sends a ghost
+link (above), and those older links still open. The track is in the part of the link after
 the "#", which browsers never send to a server: our track page
 (https://n1mda.github.io/pocketmania-privacy/t/) reads it in the browser only,
 stores nothing and sends nothing. A friend who opens the link in the game
@@ -137,7 +156,9 @@ you send yourself; Send to a friend and Show in Browse, which store the
 track with your nickname in the public iCloud database), reports of shared
 tracks, and the track page that opens a link. 15 November 2026: a track you
 build is published when you first drive it to the finish (no Show in Browse
-step any more), and stars on tracks.
+step any more), and stars on tracks. 19 November 2026: ghost links
+(Send ghost after a race: the run saved in the public iCloud database for
+whoever opens the link) and the ghost page.
 
 ## Contact
 

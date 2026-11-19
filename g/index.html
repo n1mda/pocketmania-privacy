@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<title>Beat my ghost - Pocket Mania</title>
+<meta property="og:title" content="Beat my ghost in Pocket Mania">
+<meta property="og:description" content="Race this exact run in Pocket Mania, a stunt racing game for iPhone.">
+<!-- Safari's banner: Open when the game is on this phone, Get when it is not. -->
+<meta name="apple-itunes-app" content="app-id=6828433552" id="banner">
+<!--
+  The fallback page of a beat-my-ghost link (decisions.md D234). Copied to the
+  pocketmania-privacy repository as g/index.html (https://n1mda.github.io/pocketmania-privacy/g/).
+  The fragment (#...), which the browser never sends to a server, is
+  base64url (no padding) of JSON {"v":1, "g": ghost id, "t": track name,
+  "a": alias, "ms": time}. The ghost itself is in CloudKit; only the game reads it.
+  "Race this ghost" opens the game (pocketmania://g/#...); if the page is
+  still in front a moment later, the game is not installed: the App Store.
+  No external scripts, nothing stored, nothing sent.
+-->
+<style>
+  :root {
+    --bg: #0B2A52;
+    --panel: #12386A;
+    --line: #1E4C86;
+    --text: #FFFFFF;
+    --dim: #A9BEDB;
+    --yellow: #FFC81E;
+    --ink: #0B2A52;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); }
+  body {
+    font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+             max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+  main { width: 100%; max-width: 520px; }
+  .brand { font-style: italic; font-weight: 800; letter-spacing: .08em; color: var(--yellow); text-transform: uppercase; font-size: 14px; margin: 0 0 8px; }
+  .who { color: var(--dim); margin: 0 0 4px; overflow-wrap: anywhere; }
+  h1 { font-style: italic; font-weight: 800; font-size: clamp(30px, 8vw, 48px); line-height: 1.05; margin: 0 0 8px; text-transform: uppercase; overflow-wrap: anywhere; }
+  .time { font: italic 800 clamp(40px, 12vw, 64px)/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          font-variant-numeric: tabular-nums; color: var(--yellow); margin: 12px 0 24px;
+          background: var(--panel); border: 2px solid var(--line); border-radius: 6px; padding: 16px 20px; }
+  .button { display: block; text-align: center; text-decoration: none; font-weight: 800; font-style: italic; text-transform: uppercase;
+            letter-spacing: .04em; border-radius: 4px; padding: 14px 18px; margin-top: 10px; min-height: 48px; }
+  .primary { background: var(--yellow); color: var(--ink); }
+  .secondary { border: 2px solid var(--line); color: var(--text); }
+  .note { color: var(--dim); font-size: 13px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="brand">Pocket Mania</p>
+  <p class="who" id="who">A friend challenges you</p>
+  <h1 id="track">Beat my ghost</h1>
+  <div class="time" id="time" hidden></div>
+  <a class="button primary" id="open" href="pocketmania://g/">Race this ghost</a>
+  <a class="button secondary" id="store" href="https://apps.apple.com/app/id6828433552">Get Pocket Mania on the App Store</a>
+  <p class="note" id="note">Free on iPhone and iPad. Got it? Tap Race this ghost and you race this exact run.</p>
+</main>
+<script>
+"use strict";
+const STORE = "https://apps.apple.com/app/id6828433552";
+
+function readFragment(data) {
+  if (!/^[A-Za-z0-9_-]{1,2048}$/.test(data) || data.length % 4 === 1) return null;
+  let b64 = data.replace(/-/g, "+").replace(/_/g, "/");
+  while (b64.length % 4) b64 += "=";
+  try {
+    const raw = atob(b64);
+    const bytes = Uint8Array.from(raw, c => c.charCodeAt(0));
+    const g = JSON.parse(new TextDecoder().decode(bytes));
+    if (!g || g.v !== 1 || typeof g.g !== "string" || !/^[a-z0-9]{12}$/.test(g.g)) return null;
+    return g;
+  } catch (e) { return null; }
+}
+
+function formatTime(ms) {
+  const cs = Math.floor(ms / 10);
+  return Math.floor(cs / 6000) + ":" + String(Math.floor(cs / 100) % 60).padStart(2, "0") + "." + String(cs % 100).padStart(2, "0");
+}
+
+const data = location.hash.slice(1);
+const ghost = readFragment(data);
+if (!ghost) {
+  document.getElementById("who").textContent = "This link has no ghost in it.";
+  document.getElementById("track").textContent = "Pocket Mania";
+  document.getElementById("open").style.display = "none";
+  document.getElementById("note").textContent = "Ask your friend to send it again.";
+} else {
+  const name = typeof ghost.t === "string" && ghost.t ? ghost.t.slice(0, 32) : "";
+  const alias = typeof ghost.a === "string" && ghost.a ? ghost.a.slice(0, 64) : "";
+  document.getElementById("who").textContent = alias ? alias + " challenges you" : "A friend challenges you";
+  if (name) document.getElementById("track").textContent = name;
+  if (Number.isInteger(ghost.ms) && ghost.ms > 0 && ghost.ms <= 3600000) {
+    const time = document.getElementById("time");
+    time.textContent = formatTime(ghost.ms);
+    time.hidden = false;
+  }
+  document.title = (name ? "Beat my ghost on " + name : "Beat my ghost") + " - Pocket Mania";
+  const scheme = "pocketmania://g/#" + data;
+  document.getElementById("banner").content = "app-id=6828433552, app-argument=" + scheme;
+  const open = document.getElementById("open");
+  open.href = scheme;
+  // The game opens and this page goes to the background; if it does not, the
+  // game is not on this phone: the App Store instead.
+  open.addEventListener("click", () => {
+    let left = false;
+    const away = () => { left = true; };
+    document.addEventListener("visibilitychange", () => { if (document.hidden) away(); }, { once: true });
+    window.addEventListener("pagehide", away, { once: true });
+    window.addEventListener("blur", away, { once: true });
+    setTimeout(() => { if (!left && !document.hidden) location.href = STORE; }, 1600);
+  });
+}
+// Another link opened in this tab changes only the fragment: read it afresh.
+window.addEventListener("hashchange", () => location.reload());
+</script>
+</body>
+</html>
