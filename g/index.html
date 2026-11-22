@@ -6,8 +6,8 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0B2A52">
 <meta name="referrer" content="no-referrer">
-<title>Beat my ghost - Pocket Mania</title>
-<meta property="og:title" content="Beat my ghost in Pocket Mania">
+<title>Beat my time - Pocket Mania</title>
+<meta property="og:title" content="Beat my time in Pocket Mania">
 <meta property="og:description" content="Race this exact run in Pocket Mania, a stunt racing game for iPhone.">
 <!-- The link preview's picture (D243): the fragment never reaches a server, so one picture for every link. -->
 <meta property="og:type" content="website">
@@ -27,7 +27,7 @@
   The fragment (#...), which the browser never sends to a server, is
   base64url (no padding) of JSON {"v":1, "g": ghost id, "t": track name,
   "a": alias, "ms": time}. The ghost itself is in CloudKit; only the game reads it.
-  "Race this ghost" opens the game (pocketmania://g/#...); if the page is
+  "Beat this time" opens the game (pocketmania://g/#...); if the page is
   still in front a moment later, the game is not installed: the App Store.
   No external scripts, nothing stored, nothing sent.
 -->
@@ -43,17 +43,17 @@
 <main class="content">
   <div class="heading">
     <p class="eyebrow" id="who">A friend challenges you</p>
-    <h1 id="track">Beat my ghost</h1>
+    <h1 id="track">Beat my time</h1>
   </div>
   <div class="timer" id="time-box" hidden>
     <span class="label">Time to beat</span>
     <span class="digits" id="time"></span>
   </div>
   <div class="actions">
-    <a class="plate primary" id="open" href="pocketmania://g/">Race this ghost</a>
-    <a class="plate secondary" id="store" href="https://apps.apple.com/app/id6828433552">Get Pocket Mania</a>
+    <a class="plate primary" id="open" href="pocketmania://g/">Beat this time</a>
+    <a class="badge" id="store" href="https://apps.apple.com/app/id6828433552"><img src="../app-store-badge.svg" alt="Download on the App Store" width="162" height="54"></a>
   </div>
-  <p class="note" id="note">Free on iPhone and iPad. Already have it? Tap Race this ghost to race this exact run.</p>
+  <p class="note" id="note">Free on iPhone and iPad. Already have it? Tap Beat this time to race this exact run.</p>
 </main>
 <script>
 "use strict";
@@ -86,7 +86,7 @@ function formatTime(ms) {
 const data = location.hash.slice(1);
 const ghost = readFragment(data);
 if (!ghost) {
-  document.getElementById("who").textContent = "This link has no ghost in it.";
+  document.getElementById("who").textContent = "This link has no time in it.";
   document.getElementById("track").textContent = "Pocket Mania";
   document.getElementById("open").style.display = "none";
   document.getElementById("note").textContent = "Ask your friend to send it again.";
@@ -99,7 +99,7 @@ if (!ghost) {
     document.getElementById("time").textContent = formatTime(ghost.ms);
     document.getElementById("time-box").hidden = false;
   }
-  document.title = (name ? "Beat my ghost on " + name : "Beat my ghost") + " - Pocket Mania";
+  document.title = (name ? "Beat my time on " + name : "Beat my time") + " - Pocket Mania";
   const scheme = "pocketmania://g/#" + data;
   document.getElementById("banner").content = "app-id=6828433552, app-argument=" + scheme;
   const open = document.getElementById("open");

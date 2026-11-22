@@ -1,6 +1,6 @@
 # Pocket Mania: Privacy Policy
 
-Last updated: 19 November 2026
+Last updated: 22 November 2026
 
 Pocket Mania is a racing game for iPhone. This policy says what the app does
 with your data.
@@ -38,14 +38,16 @@ When you are signed in, the app sends:
   themselves; your run so far, your inputs while you drive and your car skin
   then go to that friend's phone through Game Center (only friends: anyone
   else is disconnected). They are not stored.
-- **Notices to friends**: when your new best time passes the best time
-  of a Game Center friend on a track, the app saves a short notice for
-  that friend in the game's public iCloud database. It holds your player
+- **Notices to friends, and to the record holder**: when your new best time
+  passes the best time of a Game Center friend on a track, or takes the
+  fastest time in the world on a track from another player (friend or not),
+  the app saves a short notice for that player in the game's public iCloud
+  database. It holds your player
   ID and nickname, the friend's player ID, the track's id and its layout
-  code, and the text "Your nickname beat your time on Tangle by 0:00.32",
-  with the date. Apple then sends it to your friend as a notification. A
+  code, and the text "Your nickname just beat your time on Tangle (-0.32s)",
+  with the date. Apple then sends it to that player as a notification. A
   **challenge** you send a friend is a notice of the same kind, with the
-  text "Your nickname challenges you on Tangle". At most one of each goes to each friend per track per hour. Your friend's phone
+  text "Your nickname challenges you on Tangle". At most one of each goes to each player per track per hour. Your friend's phone
   deletes it once it has been read. Notices that are never read stay until
   the next one for the same friend and track replaces them, or until you
   ask us to delete them.
@@ -58,7 +60,7 @@ When you are signed in, the app sends:
   on your phone. Send to a friend also saves a notice for that friend
   ("Your nickname sent you a track: Tangle"), as above. To have a track
   removed, write to the contact address below.
-- **Ghost links**: when you tap Send ghost after a race, Challenge for a
+- **Ghost links**: when you tap Challenge a friend after a race, Challenge for a
   friend, or Send link in the track editor, that run (your
   inputs, its time, the track's id and content hash, your car skin, your
   player ID and nickname, and, for a track that did not come with the game,
@@ -105,7 +107,7 @@ read your photos.
 
 ## Ghost links
 
-Send ghost on the finish screen opens the iPhone's share sheet with a link to
+Challenge a friend on the finish screen opens the iPhone's share sheet with a link to
 the run you just drove; you choose who gets it. The link carries the ghost's
 random id and, for the page that opens it on a phone without the game, the
 track's name, your nickname and your time, all after the "#", which browsers
@@ -157,8 +159,9 @@ track with your nickname in the public iCloud database), reports of shared
 tracks, and the track page that opens a link. 15 November 2026: a track you
 build is published when you first drive it to the finish (no Show in Browse
 step any more), and stars on tracks. 19 November 2026: ghost links
-(Send ghost after a race: the run saved in the public iCloud database for
-whoever opens the link) and the ghost page.
+(Challenge a friend after a race: the run saved in the public iCloud database for
+whoever opens the link) and the ghost page. 22 November 2026: the player
+whose world-best time on a track you beat gets the notice too, friend or not.
 
 ## Contact
 
