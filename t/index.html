@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B2A52">
 <meta name="referrer" content="no-referrer">
 <title>Pocket Mania track</title>
 <meta property="og:title" content="Race my track in Pocket Mania">
@@ -29,58 +30,36 @@
   ticks), "cells": [[x, y, z, block, turn], ...]}.
   No external scripts, nothing stored, nothing sent.
 -->
-<style>
-  :root {
-    --bg: #0B2A52;
-    --panel: #12386A;
-    --line: #1E4C86;
-    --text: #FFFFFF;
-    --dim: #A9BEDB;
-    --yellow: #FFC81E;
-    --ink: #0B2A52;
-    --go: #3DDC84;
-    --coral: #FF6B5A;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--text); }
-  body {
-    font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
-             max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-  }
-  main { width: 100%; max-width: 880px; display: grid; gap: 20px; grid-template-columns: 1fr; }
-  @media (min-width: 720px) { main { grid-template-columns: 1.2fr 1fr; align-items: center; } }
-  .map { background: var(--panel); border: 2px solid var(--line); border-radius: 6px; padding: 12px; }
-  canvas { display: block; width: 100%; aspect-ratio: 1; }
-  .brand { font-style: italic; font-weight: 800; letter-spacing: .08em; color: var(--yellow); text-transform: uppercase; font-size: 14px; margin: 0 0 8px; }
-  h1 { font-style: italic; font-weight: 800; font-size: clamp(28px, 6vw, 44px); line-height: 1.05; margin: 0 0 6px; text-transform: uppercase; overflow-wrap: anywhere; }
-  .by { color: var(--dim); margin: 0 0 4px; overflow-wrap: anywhere; }
-  .facts { color: var(--dim); font-size: 14px; margin: 0 0 20px; }
-  .button { display: block; text-align: center; text-decoration: none; font-weight: 800; font-style: italic; text-transform: uppercase;
-            letter-spacing: .04em; border-radius: 4px; padding: 14px 18px; margin-top: 10px; min-height: 48px; }
-  .primary { background: var(--yellow); color: var(--ink); }
-  .secondary { border: 2px solid var(--line); color: var(--text); }
-  .note { color: var(--dim); font-size: 13px; margin-top: 14px; }
-  .error h1 { font-size: 28px; }
-</style>
+<link rel="preload" href="../fonts/saira-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../site.css">
 </head>
 <body>
-<main id="main">
-  <div class="map"><canvas id="map" width="640" height="640" aria-label="The track seen from above"></canvas></div>
-  <section>
-    <p class="brand">Pocket Mania</p>
+<video class="race" autoplay muted loop playsinline preload="auto" poster="../race.jpg" aria-hidden="true" tabindex="-1">
+  <source src="../race.mp4" type="video/mp4">
+</video>
+<div class="shade" aria-hidden="true"></div>
+<header class="top"><img class="wordmark" src="../wordmark.png" alt="Pocket Mania" width="1400" height="160"></header>
+<main class="content" id="main">
+  <div class="map" id="map-box"><canvas id="map" width="640" height="640" aria-label="The track seen from above"></canvas></div>
+  <div class="heading">
+    <p class="eyebrow" id="by"></p>
     <h1 id="name">Loading track</h1>
-    <p class="by" id="by"></p>
     <p class="facts" id="facts"></p>
-    <a class="button primary" id="open" href="pocketmania://t/">Open in Pocket Mania</a>
-    <a class="button secondary" id="store" href="https://apps.apple.com/app/id6828433552">Get Pocket Mania</a>
-    <p class="note">The track travels inside this link. Nothing about it is sent to any server.</p>
-  </section>
+  </div>
+  <div class="actions">
+    <a class="plate primary" id="open" href="pocketmania://t/">Open in Pocket Mania</a>
+    <a class="plate secondary" id="store" href="https://apps.apple.com/app/id6828433552">Get Pocket Mania</a>
+  </div>
+  <p class="note">The track travels inside this link. Nothing about it is sent to any server.</p>
 </main>
 <script>
 "use strict";
+// Reduced motion: the race's still frame (the poster) instead of the loop.
+if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const race = document.querySelector(".race");
+  race.removeAttribute("autoplay");
+  race.pause();
+}
 const GRID = 32, MAX_CELLS = 1024, MAX_JSON = 65536;
 const START = 7, CHECKPOINT = 8, FINISH = 9;
 const MOODS = { "": "Day", day: "Day", sunrise: "Sunrise", sunset: "Sunset", night: "Night" };
@@ -156,6 +135,7 @@ function fail(why) {
   document.getElementById("name").textContent = "This link has no track";
   document.getElementById("by").textContent = why;
   document.getElementById("open").style.display = "none";
+  document.getElementById("map-box").hidden = true;
 }
 
 async function main() {
@@ -164,6 +144,7 @@ async function main() {
   if (typeof DecompressionStream === "undefined") {
     document.getElementById("name").textContent = "A Pocket Mania track";
     document.getElementById("by").textContent = "Open it in the game to see it.";
+    document.getElementById("map-box").hidden = true;
   } else {
     let track;
     try { track = await decode(data); } catch (e) { return fail("The link is broken or cut short. Ask your friend to share it again."); }

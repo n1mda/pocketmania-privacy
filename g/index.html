@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B2A52">
 <meta name="referrer" content="no-referrer">
 <title>Beat my ghost - Pocket Mania</title>
 <meta property="og:title" content="Beat my ghost in Pocket Mania">
@@ -30,51 +31,38 @@
   still in front a moment later, the game is not installed: the App Store.
   No external scripts, nothing stored, nothing sent.
 -->
-<style>
-  :root {
-    --bg: #0B2A52;
-    --panel: #12386A;
-    --line: #1E4C86;
-    --text: #FFFFFF;
-    --dim: #A9BEDB;
-    --yellow: #FFC81E;
-    --ink: #0B2A52;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--text); }
-  body {
-    font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
-             max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-  }
-  main { width: 100%; max-width: 520px; }
-  .brand { font-style: italic; font-weight: 800; letter-spacing: .08em; color: var(--yellow); text-transform: uppercase; font-size: 14px; margin: 0 0 8px; }
-  .who { color: var(--dim); margin: 0 0 4px; overflow-wrap: anywhere; }
-  h1 { font-style: italic; font-weight: 800; font-size: clamp(30px, 8vw, 48px); line-height: 1.05; margin: 0 0 8px; text-transform: uppercase; overflow-wrap: anywhere; }
-  .time { font: italic 800 clamp(40px, 12vw, 64px)/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          font-variant-numeric: tabular-nums; color: var(--yellow); margin: 12px 0 24px;
-          background: var(--panel); border: 2px solid var(--line); border-radius: 6px; padding: 16px 20px; }
-  .button { display: block; text-align: center; text-decoration: none; font-weight: 800; font-style: italic; text-transform: uppercase;
-            letter-spacing: .04em; border-radius: 4px; padding: 14px 18px; margin-top: 10px; min-height: 48px; }
-  .primary { background: var(--yellow); color: var(--ink); }
-  .secondary { border: 2px solid var(--line); color: var(--text); }
-  .note { color: var(--dim); font-size: 13px; margin-top: 14px; }
-</style>
+<link rel="preload" href="../fonts/saira-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../site.css">
 </head>
 <body>
-<main>
-  <p class="brand">Pocket Mania</p>
-  <p class="who" id="who">A friend challenges you</p>
-  <h1 id="track">Beat my ghost</h1>
-  <div class="time" id="time" hidden></div>
-  <a class="button primary" id="open" href="pocketmania://g/">Race this ghost</a>
-  <a class="button secondary" id="store" href="https://apps.apple.com/app/id6828433552">Get Pocket Mania on the App Store</a>
-  <p class="note" id="note">Free on iPhone and iPad. Got it? Tap Race this ghost and you race this exact run.</p>
+<video class="race" autoplay muted loop playsinline preload="auto" poster="../race.jpg" aria-hidden="true" tabindex="-1">
+  <source src="../race.mp4" type="video/mp4">
+</video>
+<div class="shade" aria-hidden="true"></div>
+<header class="top"><img class="wordmark" src="../wordmark.png" alt="Pocket Mania" width="1400" height="160"></header>
+<main class="content">
+  <div class="heading">
+    <p class="eyebrow" id="who">A friend challenges you</p>
+    <h1 id="track">Beat my ghost</h1>
+  </div>
+  <div class="timer" id="time-box" hidden>
+    <span class="label">Time to beat</span>
+    <span class="digits" id="time"></span>
+  </div>
+  <div class="actions">
+    <a class="plate primary" id="open" href="pocketmania://g/">Race this ghost</a>
+    <a class="plate secondary" id="store" href="https://apps.apple.com/app/id6828433552">Get Pocket Mania</a>
+  </div>
+  <p class="note" id="note">Free on iPhone and iPad. Already have it? Tap Race this ghost to race this exact run.</p>
 </main>
 <script>
 "use strict";
+// Reduced motion: the race's still frame (the poster) instead of the loop.
+if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const race = document.querySelector(".race");
+  race.removeAttribute("autoplay");
+  race.pause();
+}
 const STORE = "https://apps.apple.com/app/id6828433552";
 
 function readFragment(data) {
@@ -108,9 +96,8 @@ if (!ghost) {
   document.getElementById("who").textContent = alias ? alias + " challenges you" : "A friend challenges you";
   if (name) document.getElementById("track").textContent = name;
   if (Number.isInteger(ghost.ms) && ghost.ms > 0 && ghost.ms <= 3600000) {
-    const time = document.getElementById("time");
-    time.textContent = formatTime(ghost.ms);
-    time.hidden = false;
+    document.getElementById("time").textContent = formatTime(ghost.ms);
+    document.getElementById("time-box").hidden = false;
   }
   document.title = (name ? "Beat my ghost on " + name : "Beat my ghost") + " - Pocket Mania";
   const scheme = "pocketmania://g/#" + data;
