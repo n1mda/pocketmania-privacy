@@ -1,6 +1,6 @@
 # Pocket Mania: Privacy Policy
 
-Last updated: 22 November 2026
+Last updated: 23 November 2026
 
 Pocket Mania is a racing game for iPhone. This policy says what the app does
 with your data.
@@ -51,6 +51,9 @@ When you are signed in, the app sends:
   deletes it once it has been read. Notices that are never read stay until
   the next one for the same friend and track replaces them, or until you
   ask us to delete them.
+- **Friends by challenge link**: when you open a player's challenge link, they
+  become your friend in the game (kept on your phone), and a notice like the
+  ones above tells them, with your nickname, so you become theirs too.
 - **Tracks you build**: when you first drive a track you built to the
   finish (a Test drive or in Solo), the track (its blocks, name, mood and
   id), your fastest time on it, and your player ID and nickname are saved in
@@ -162,6 +165,7 @@ step any more), and stars on tracks. 19 November 2026: ghost links
 (Challenge a friend after a race: the run saved in the public iCloud database for
 whoever opens the link) and the ghost page. 22 November 2026: the player
 whose world-best time on a track you beat gets the notice too, friend or not.
+23 November 2026: opening a challenge link makes you and its sender friends in the game.
 
 ## Contact
 
