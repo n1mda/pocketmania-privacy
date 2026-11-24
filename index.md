@@ -1,6 +1,6 @@
 # Pocket Mania: Privacy Policy
 
-Last updated: 23 November 2026
+Last updated: 24 November 2026
 
 Pocket Mania is a racing game for iPhone. This policy says what the app does
 with your data.
@@ -38,18 +38,18 @@ When you are signed in, the app sends:
   themselves; your run so far, your inputs while you drive and your car skin
   then go to that friend's phone through Game Center (only friends: anyone
   else is disconnected). They are not stored.
-- **Notices to friends, and to the record holder**: when your new best time
-  passes the best time of a Game Center friend on a track, or takes the
-  fastest time in the world on a track from another player (friend or not),
-  the app saves a short notice for that player in the game's public iCloud
+- **Notices to players you pass**: when your new best time passes the best
+  time of another player on a track (a Game Center friend, or another
+  player: at most 3 of those per new best, the ones just ahead of you), the
+  app saves a short notice for that player in the game's public iCloud
   database. It holds your player
-  ID and nickname, the friend's player ID, the track's id and its layout
+  ID and nickname, that player's ID, the track's id and its layout
   code, and the text "Your nickname just beat your time on Tangle (-0.32s)",
   with the date. Apple then sends it to that player as a notification. A
   **challenge** you send a friend is a notice of the same kind, with the
-  text "Your nickname challenges you on Tangle". At most one of each goes to each player per track per hour. Your friend's phone
+  text "Your nickname challenges you on Tangle". At most one of each goes to each player per track per hour. Their phone
   deletes it once it has been read. Notices that are never read stay until
-  the next one for the same friend and track replaces them, or until you
+  the next one from you for the same player and track replaces them, or until you
   ask us to delete them.
 - **Friends by challenge link**: when you open a player's challenge link, they
   become your friend in the game (kept on your phone), and a notice like the
@@ -166,6 +166,8 @@ step any more), and stars on tracks. 19 November 2026: ghost links
 whoever opens the link) and the ghost page. 22 November 2026: the player
 whose world-best time on a track you beat gets the notice too, friend or not.
 23 November 2026: opening a challenge link makes you and its sender friends in the game.
+24 November 2026: any player whose best time you pass can get the notice,
+not only friends (at most 3 who are not your friends per new best).
 
 ## Contact
 
